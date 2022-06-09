@@ -26,14 +26,14 @@ iface eth0 inet dhcp
 EOF
 
 # Change hostname
-echo unmatched > /etc/hostname
+echo debian > /etc/hostname
 
 # Set up fstab
 cat > /etc/fstab <<EOF
 # <file system> <mount point>   <type>  <options>       <dump>  <pass>
 
-/dev/mmcblk0p4 /               ext4    errors=remount-ro 0       1
-/dev/mmcblk0p3 /boot           vfat    defaults   0       2
+LABEL=rootfs /               ext4    errors=remount-ro 0       1
+LABEL=boot /boot           vfat    defaults   0       2
 EOF
 
 # add needed modules in initrd
@@ -41,11 +41,12 @@ echo mmc_spi >>/etc/initramfs-tools/modules
 rm /boot/initrd*
 update-initramfs -c -k all
 
-# Set up u-boot (TODO: better integration for kernel updates)
-# Should cp your latest dtb file,e.g, cp /usr/lib/linux-image-xx-riscv64
-cp /usr/lib/linux-image-*-riscv64/sifive/hifive-unmatched-a00.dtb /boot/
-echo U_BOOT_FDT=\"hifive-unmatched-a00.dtb\" >> /etc/default/u-boot
-echo U_BOOT_PARAMETERS=\"rw rootwait console=ttySIF0,115200 earlycon\" >> /etc/default/u-boot
+# console=ttySIF0,115200 for Unmatched?
+dtb_dirs=(/usr/lib/linux-image-*-riscv64)
+cat >>/etc/default/u-boot <<EOF
+U_BOOT_PARAMETERS="rw noquite root=LABEL=rootfs earlycon"
+U_BOOT_FDT_DIR="${dtb_dirs[0]}"
+EOF
 u-boot-update
 
 useradd -m -s /bin/bash -G sudo debian
