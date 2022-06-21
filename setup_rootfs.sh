@@ -9,7 +9,7 @@ fi
 
 # Update package information
 apt-get update
-apt-get install -y linux-image-riscv64 u-boot-menu u-boot-sifive openssh-server sudo locales
+apt-get install -y linux-image-riscv64 u-boot-menu u-boot-sifive sudo locales
 apt-get clean
 
 sed -i s'/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
