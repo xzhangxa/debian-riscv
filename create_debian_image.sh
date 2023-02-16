@@ -7,6 +7,8 @@ cleanup() {
     sudo umount /tmp/deb_rv64/boot
     sudo umount /tmp/deb_rv64
     sudo rm -rf /tmp/deb_rv64
+    sudo fsck ${LOOP_DEVICE}p1
+    sudo fsck ${LOOP_DEVICE}p2
     sudo losetup -d $LOOP_DEVICE
     if [ $1 -ne 0 ]; then
         rm $IMG_NAME
