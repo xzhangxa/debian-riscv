@@ -27,8 +27,8 @@ sudo apt-get install -y debootstrap qemu-user-static binfmt-support debian-ports
 if [ -f /etc/os-release ]; then
     . /etc/os-release
     if [ "$NAME" = "Ubuntu" ] && [ "$VERSION_ID" = "20.04" ]; then
-        wget -c -P /tmp http://http.us.debian.org/debian/pool/main/d/debian-ports-archive-keyring/debian-ports-archive-keyring_2022.02.15_all.deb
-        sudo dpkg -i /tmp/debian-ports-archive-keyring_2022.02.15_all.deb
+        wget -c -P /tmp http://http.us.debian.org/debian/pool/main/d/debian-ports-archive-keyring/debian-ports-archive-keyring_2023.02.01_all.deb
+        sudo dpkg -i /tmp/debian-ports-archive-keyring_2023.02.01_all.deb
     fi
 fi
 
