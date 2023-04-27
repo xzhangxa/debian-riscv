@@ -1,0 +1,71 @@
+From b98544f5b535af3a832e3fb1fe043cc48840a01e Mon Sep 17 00:00:00 2001
+From: Ubuntu <ubuntu@localhost>
+Date: Thu, 23 Jun 2022 15:25:19 +0800
+Subject: [PATCH 5/6] fix perl compilation error
+
+---
+ tools/src/perl-5.12.3/Configure | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
+
+diff --git a/tools/src/perl-5.12.3/Configure b/tools/src/perl-5.12.3/Configure
+index 3a8732b4516079761a0e062a00fe0fa2d014d092..77dafcefe445f9cb918130556ed423efefedbb21 100755
+--- a/tools/src/perl-5.12.3/Configure
++++ b/tools/src/perl-5.12.3/Configure
+@@ -4536,7 +4536,7 @@ else
+ fi
+ $rm -f try try.*
+ case "$gccversion" in
+-1*) cpp=`./loc gcc-cpp $cpp $pth` ;;
++1.*) cpp=`./loc gcc-cpp $cpp $pth` ;;
+ esac
+ case "$gccversion" in
+ '') gccosandvers='' ;;
+@@ -4688,6 +4688,18 @@ fi
+ 
+ if $ok; then
+ 	: nothing
++elif echo 'Maybe "'"$cc"' -E -ftrack-macro-expansion=0" will work...'; \
++       $cc -E -ftrack-macro-expansion=0 <testcpp.c >testcpp.out 2>&1; \
++       $contains 'abc.*xyz' testcpp.out >/dev/null 2>&1 ; then
++       echo "Yup, it does."
++       x_cpp="$cc $cppflags -E -ftrack-macro-expansion=0"
++       x_minus='';
++elif echo 'Maybe "'"$cc"' -E -ftrack-macro-expansion=0 -" will work...';
++       $cc -E -ftrack-macro-expansion=0 - <testcpp.c >testcpp.out 2>&1; \
++       $contains 'abc.*xyz' testcpp.out >/dev/null 2>&1 ; then
++       echo "Yup, it does."
++       x_cpp="$cc $cppflags -E -ftrack-macro-expansion=0"
++       x_minus='-';
+ elif echo 'Maybe "'"$cc"' -E" will work...'; \
+ 	$cc -E <testcpp.c >testcpp.out 2>&1; \
+ 	$contains 'abc.*xyz' testcpp.out >/dev/null 2>&1 ; then
+@@ -5128,7 +5140,7 @@ fi
+ case "$hint" in
+ default|recommended)
+ 	case "$gccversion" in
+-	1*) dflt="$dflt -fpcc-struct-return" ;;
++	1.*) dflt="$dflt -fpcc-struct-return" ;;
+ 	esac
+ 	case "$optimize:$DEBUGGING" in
+ 	*-g*:old) dflt="$dflt -DDEBUGGING";;
+@@ -5143,7 +5155,7 @@ default|recommended)
+ 		;;
+ 	esac
+ 	case "$gccversion" in
+-	1*) ;;
++	1.*) ;;
+ 	2.[0-8]*) ;;
+ 	?*)	set strict-aliasing -fno-strict-aliasing
+ 		eval $checkccflag
+@@ -5245,7 +5257,7 @@ case "$cppflags" in
+ *)  cppflags="$cppflags $ccflags" ;;
+ esac
+ case "$gccversion" in
+-1*) cppflags="$cppflags -D__GNUC__"
++1.*) cppflags="$cppflags -D__GNUC__"
+ esac
+ case "$mips_type" in
+ '');;
+-- 
+2.34.1
+

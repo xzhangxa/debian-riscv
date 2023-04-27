@@ -1,0 +1,43 @@
+From 121ecc3ce0b93a0ceee4faa18558d263b712be08 Mon Sep 17 00:00:00 2001
+From: Ubuntu <ubuntu@localhost>
+Date: Thu, 23 Jun 2022 15:21:46 +0800
+Subject: [PATCH 4/6] fix gets undeclared error
+
+---
+ tools/src/specsum/gnulib/stdio.in.h | 4 ++--
+ tools/src/tar-1.25/gnu/stdio.in.h   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/src/specsum/gnulib/stdio.in.h b/tools/src/specsum/gnulib/stdio.in.h
+index 9e82b9055455c6f86e2aeedcda0acaf4dac2737a..e113e8b6a6837edeb6de04e2d3d3c09ddc7da103 100644
+--- a/tools/src/specsum/gnulib/stdio.in.h
++++ b/tools/src/specsum/gnulib/stdio.in.h
+@@ -158,8 +158,8 @@ _GL_WARN_ON_USE (fflush, "fflush is not always POSIX compliant - "
+ /* It is very rare that the developer ever has full control of stdin,
+    so any use of gets warrants an unconditional warning.  Assume it is
+    always declared, since it is required by C89.  */
+-#undef gets
+-_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
++//#undef gets
++//_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+ 
+ #if @GNULIB_FOPEN@
+ # if @REPLACE_FOPEN@
+diff --git a/tools/src/tar-1.25/gnu/stdio.in.h b/tools/src/tar-1.25/gnu/stdio.in.h
+index 02df65a5b1a8f80005a691a6ad54d6cb010a4b13..3929d5f71f309a6ab06a7eb7db874e5d75426def 100644
+--- a/tools/src/tar-1.25/gnu/stdio.in.h
++++ b/tools/src/tar-1.25/gnu/stdio.in.h
+@@ -143,8 +143,8 @@ _GL_WARN_ON_USE (fflush, "fflush is not always POSIX compliant - "
+ /* It is very rare that the developer ever has full control of stdin,
+    so any use of gets warrants an unconditional warning.  Assume it is
+    always declared, since it is required by C89.  */
+-#undef gets
+-_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
++//#undef gets
++//_GL_WARN_ON_USE (gets, "gets is a security hole - use fgets instead");
+ 
+ #if @GNULIB_FOPEN@
+ # if @REPLACE_FOPEN@
+-- 
+2.34.1
+

@@ -1,0 +1,74 @@
+From 8b749bd8f8c56d309ca80811a956d65c34254c0f Mon Sep 17 00:00:00 2001
+From: Ubuntu <ubuntu@localhost>
+Date: Thu, 23 Jun 2022 15:31:08 +0800
+Subject: [PATCH 6/6] fix local t error
+
+---
+ tools/src/TimeDate-1.20/t/getdate.t            |  2 +-
+ tools/src/perl-5.12.3/ext/Time-Local/t/Local.t | 11 +++++------
+ 2 files changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/tools/src/TimeDate-1.20/t/getdate.t b/tools/src/TimeDate-1.20/t/getdate.t
+index 31b577bac04b80608f48d8e31e92cfb19820b66d..82c5850ffc37d7e57f1ac8bec8738d5680fb8669 100644
+--- a/tools/src/TimeDate-1.20/t/getdate.t
++++ b/tools/src/TimeDate-1.20/t/getdate.t
+@@ -156,7 +156,7 @@ Jul 22 10:00:00 UTC 2002	     ;1027332000
+ !;
+ 
+ require Time::Local;
+-my $offset = Time::Local::timegm(0,0,0,1,0,70);
++my $offset = Time::Local::timegm(0,0,0,1,0,1970);
+ 
+ @data = split(/\n/, $data);
+ 
+diff --git a/tools/src/perl-5.12.3/ext/Time-Local/t/Local.t b/tools/src/perl-5.12.3/ext/Time-Local/t/Local.t
+index 61a15a8b16873759b8dd6c6975e3a1f4c6b0cbd3..8bf0a0bbbd1f54dc921b5a5dc902fc5bf92942fd 100755
+--- a/tools/src/perl-5.12.3/ext/Time-Local/t/Local.t
++++ b/tools/src/perl-5.12.3/ext/Time-Local/t/Local.t
+@@ -84,7 +84,7 @@ for (@time, @neg_time) {
+ 
+     # Test timelocal()
+     {
+-        my $year_in = $year < 70 ? $year + 1900 : $year;
++        my $year_in = $year + 1900;
+         my $time = timelocal($sec,$min,$hour,$mday,$mon,$year_in);
+ 
+         my($s,$m,$h,$D,$M,$Y) = localtime($time);
+@@ -100,7 +100,7 @@ for (@time, @neg_time) {
+ 
+     # Test timegm()
+     {
+-        my $year_in = $year < 70 ? $year + 1900 : $year;
++        my $year_in = $year + 1900;
+         my $time = timegm($sec,$min,$hour,$mday,$mon,$year_in);
+ 
+         my($s,$m,$h,$D,$M,$Y) = gmtime($time);
+@@ -117,7 +117,6 @@ for (@time, @neg_time) {
+ 
+ for (@bad_time) {
+     my($year, $mon, $mday, $hour, $min, $sec) = @$_;
+-    $year -= 1900;
+     $mon--;
+ 
+     eval { timegm($sec,$min,$hour,$mday,$mon,$year) };
+@@ -126,14 +125,14 @@ for (@bad_time) {
+ }
+ 
+ {
+-    is(timelocal(0,0,1,1,0,90) - timelocal(0,0,0,1,0,90), 3600,
++    is(timelocal(0,0,1,1,0,1990) - timelocal(0,0,0,1,0,1990), 3600,
+        'one hour difference between two calls to timelocal');
+ 
+-    is(timelocal(1,2,3,1,0,100) - timelocal(1,2,3,31,11,99), 24 * 3600,
++    is(timelocal(1,2,3,1,0,2000) - timelocal(1,2,3,31,11,1999), 24 * 3600,
+        'one day difference between two calls to timelocal');
+ 
+     # Diff beween Jan 1, 1980 and Mar 1, 1980 = (31 + 29 = 60 days)
+-    is(timegm(0,0,0, 1, 2, 80) - timegm(0,0,0, 1, 0, 80), 60 * 24 * 3600,
++    is(timegm(0,0,0, 1, 2, 1980) - timegm(0,0,0, 1, 0, 1980), 60 * 24 * 3600,
+        '60 day difference between two calls to timegm');
+ }
+ 
+-- 
+2.34.1
+

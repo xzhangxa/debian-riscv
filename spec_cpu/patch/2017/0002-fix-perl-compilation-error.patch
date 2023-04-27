@@ -1,0 +1,52 @@
+From 52fa7afe659f41912e6fd2d2e33fa9882cf9f6f0 Mon Sep 17 00:00:00 2001
+From: Ubuntu <ubuntu@localhost>
+Date: Wed, 6 Jul 2022 10:31:51 +0800
+Subject: [PATCH 2/3] fix perl compilation error
+
+---
+ tools/src/perl-5.24.0/Configure | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/src/perl-5.24.0/Configure b/tools/src/perl-5.24.0/Configure
+index 5a353d6de4322e04f9e433d7cdb0ce68b4e68b75..e3319878fb3a16bc6eb9305a853e632d6945cb91 100755
+--- a/tools/src/perl-5.24.0/Configure
++++ b/tools/src/perl-5.24.0/Configure
+@@ -4686,7 +4686,7 @@ else
+ fi
+ $rm -f try try.*
+ case "$gccversion" in
+-1*) cpp=`./loc gcc-cpp $cpp $pth` ;;
++1.*) cpp=`./loc gcc-cpp $cpp $pth` ;;
+ esac
+ case "$gccversion" in
+ '') gccosandvers='' ;;
+@@ -5438,7 +5438,7 @@ fi
+ case "$hint" in
+ default|recommended)
+ 	case "$gccversion" in
+-	1*) dflt="$dflt -fpcc-struct-return" ;;
++	1.*) dflt="$dflt -fpcc-struct-return" ;;
+ 	esac
+ 	case "$optimize:$DEBUGGING" in
+ 	*-g*:old) dflt="$dflt -DDEBUGGING";;
+@@ -5453,7 +5453,7 @@ default|recommended)
+ 		;;
+ 	esac
+ 	case "$gccversion" in
+-	1*) ;;
++	1.*) ;;
+ 	2.[0-8]*) ;;
+ 	?*)	set strict-aliasing -fno-strict-aliasing
+ 		eval $checkccflag
+@@ -5571,7 +5571,7 @@ case "$cppflags" in
+     ;;
+ esac
+ case "$gccversion" in
+-1*) cppflags="$cppflags -D__GNUC__"
++1.*) cppflags="$cppflags -D__GNUC__"
+ esac
+ case "$mips_type" in
+ '');;
+-- 
+2.34.1
+

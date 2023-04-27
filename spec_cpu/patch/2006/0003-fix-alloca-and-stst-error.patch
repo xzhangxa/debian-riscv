@@ -1,0 +1,34 @@
+From 0484e6e36efd5ccdf5709d29ac475b0cadc6b716 Mon Sep 17 00:00:00 2001
+From: Ubuntu <ubuntu@localhost>
+Date: Thu, 23 Jun 2022 15:19:13 +0800
+Subject: [PATCH 3/6] fix alloca and stst error
+
+---
+ tools/src/make-3.82/glob/glob.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/src/make-3.82/glob/glob.c b/tools/src/make-3.82/glob/glob.c
+index 1a1920519b17f2034a1d855c57f00e818e5b796e..0cdc4becab46be4bcd61a552f5838e84600b94bd 100644
+--- a/tools/src/make-3.82/glob/glob.c
++++ b/tools/src/make-3.82/glob/glob.c
+@@ -208,7 +208,7 @@ my_realloc (p, n)
+ #endif /* __GNU_LIBRARY__ || __DJGPP__ */
+ 
+ 
+-#if !defined __alloca && !defined __GNU_LIBRARY__
++#if !defined __alloca && defined __GNU_LIBRARY__
+ 
+ # ifdef	__GNUC__
+ #  undef alloca
+@@ -231,7 +231,7 @@ extern char *alloca ();
+ 
+ #endif
+ 
+-#ifndef __GNU_LIBRARY__
++#ifdef __GNU_LIBRARY__
+ # define __stat stat
+ # ifdef STAT_MACROS_BROKEN
+ #  undef S_ISDIR
+-- 
+2.34.1
+

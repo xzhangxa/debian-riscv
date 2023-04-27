@@ -1,0 +1,25 @@
+From e9618b07a4ee99806ccdc8843fc0fa0c886d9562 Mon Sep 17 00:00:00 2001
+From: Ubuntu <ubuntu@localhost>
+Date: Wed, 6 Jul 2022 10:33:36 +0800
+Subject: [PATCH 3/3] fix local t error
+
+---
+ tools/src/TimeDate-2.30/t/getdate.t | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/src/TimeDate-2.30/t/getdate.t b/tools/src/TimeDate-2.30/t/getdate.t
+index 31b577bac04b80608f48d8e31e92cfb19820b66d..82c5850ffc37d7e57f1ac8bec8738d5680fb8669 100644
+--- a/tools/src/TimeDate-2.30/t/getdate.t
++++ b/tools/src/TimeDate-2.30/t/getdate.t
+@@ -156,7 +156,7 @@ Jul 22 10:00:00 UTC 2002	     ;1027332000
+ !;
+ 
+ require Time::Local;
+-my $offset = Time::Local::timegm(0,0,0,1,0,70);
++my $offset = Time::Local::timegm(0,0,0,1,0,1970);
+ 
+ @data = split(/\n/, $data);
+ 
+-- 
+2.34.1
+

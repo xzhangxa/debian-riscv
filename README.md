@@ -45,3 +45,7 @@ sudo ufw allow from VPS_IP to any port nfs
 # use these kernel parameters: root=/dev/nfs rootfstype=nfs nfsroot=HOST_IP:/opt/nfs_debian,tcp,vers=4 ip=dhcp rw
 # please note nfsroot vers being 4 or 3 depends on your development machine
 ```
+
+## SPEC CPU 2006/2017 build scripts for RISC-V
+
+Please see `spec_cpu/README.md`
