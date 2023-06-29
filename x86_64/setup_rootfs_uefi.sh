@@ -5,12 +5,7 @@ set -e
 if [ $# -eq 2 ]; then
     export http_proxy="$1"
     export https_proxy="$1"
-    export BOOTDEVICE=$2
 fi
-
-mount none -t proc /proc
-mount none -t sysfs /sys
-export HOME=/root
 
 sed -i s'/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen
 locale-gen en_US.UTF-8
@@ -18,7 +13,7 @@ update-locale LANG=en_US.UTF-8
 
 # Update package information
 apt-get update
-apt-get install -y grub-pc grub2
+apt-get install -y grub-efi-amd64
 apt-get clean
 
 # Set up basic networking
@@ -50,15 +45,12 @@ GRUB_CMDLINE_LINUX=""
 GRUB_TERMINAL=console
 EOF
 
-grub-install $BOOTDEVICE
+grub-install --target=x86_64-efi
 update-grub
 
 useradd -m -s /bin/bash -G sudo debian
 echo "root:debian" | chpasswd
 echo "debian:debian" | chpasswd
-
-umount /proc
-umount /sys
 
 # exit chroot
 exit

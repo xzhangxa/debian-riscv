@@ -3,6 +3,7 @@
 IMG_NAME=debian-stable-amd64.img
 LOOP_DEVICE=/dev/loop0
 ROOTFS_DIR=/tmp/deb_amd64
+SETUP_SCRIPT=setup_rootfs_bios.sh
 
 cleanup() {
     sudo umount ${ROOTFS_DIR}
@@ -19,7 +20,7 @@ if [ -f $IMG_NAME ]; then
     rm $IMG_NAME
 fi
 
-sudo apt-get install -y debootstrap debian-archive-keyring gdisk
+sudo apt-get install -y debootstrap debian-archive-keyring fdisk
 
 # Workaround for Ubuntu 20.04, which debian-ports-archive-keyring package is out of date.
 # https://bugs.launchpad.net/ubuntu/+source/debian-ports-archive-keyring/+bug/1969202
@@ -65,13 +66,13 @@ if [ $? -ne 0 ]; then
     cleanup 1
 fi
 
-sudo mount --bind /dev ${ROOTFS_DIR}/dev
+for i in /dev /dev/pts /proc /sys /run; do sudo mount -B $i ${ROOTFS_DIR}$i; done
 
 # chroot in and set up
-sudo cp setup_rootfs.sh ${ROOTFS_DIR}
-sudo chroot ${ROOTFS_DIR} ./setup_rootfs.sh $http_proxy ${LOOP_DEVICE} || cleanup 1
-sudo rm ${ROOTFS_DIR}/setup_rootfs.sh
+sudo cp ${SETUP_SCRIPT} ${ROOTFS_DIR}
+sudo chroot ${ROOTFS_DIR} ./${SETUP_SCRIPT} $http_proxy ${LOOP_DEVICE} || cleanup 1
+sudo rm ${ROOTFS_DIR}/${SETUP_SCRIPT}
 
-sudo umount ${ROOTFS_DIR}/dev
+for i in /dev/pts /dev /proc /sys /run; do sudo umount ${ROOTFS_DIR}$i; done
 
 cleanup 0
