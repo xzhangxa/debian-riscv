@@ -47,6 +47,8 @@ EOF
 
 grub-install --target=x86_64-efi
 update-grub
+cp -r /boot/efi/EFI/debian /boot/efi/EFI/BOOT
+mv /boot/efi/EFI/BOOT/grubx64.efi /boot/efi/EFI/BOOT/bootx64.efi
 
 useradd -m -s /bin/bash -G sudo debian
 echo "root:debian" | chpasswd
