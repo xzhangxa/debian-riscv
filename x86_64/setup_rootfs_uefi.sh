@@ -2,7 +2,7 @@
 
 set -e
 
-if [ $# -eq 2 ]; then
+if [ $# -eq 1 ]; then
     export http_proxy="$1"
     export https_proxy="$1"
 fi
