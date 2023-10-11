@@ -20,15 +20,14 @@ if [ -f $IMG_NAME ]; then
     rm $IMG_NAME
 fi
 
-sudo apt-get install -y debootstrap qemu-user-static binfmt-support debian-ports-archive-keyring gdisk dosfstools
+sudo apt-get install -y debootstrap binfmt-support debian-archive-keyring gdisk dosfstools
 
-# Workaround for Ubuntu 20.04, which debian-ports-archive-keyring package is out of date.
-# https://bugs.launchpad.net/ubuntu/+source/debian-ports-archive-keyring/+bug/1969202
+# Workaround for Ubuntu 20.04, which debian-archive-keyring package is out of date.
 if [ -f /etc/os-release ]; then
     . /etc/os-release
     if [ "$NAME" = "Ubuntu" ] && [ "$VERSION_ID" = "20.04" ]; then
-        wget -c -P /tmp http://http.us.debian.org/debian/pool/main/d/debian-ports-archive-keyring/debian-ports-archive-keyring_2023.02.01_all.deb
-        sudo dpkg -i /tmp/debian-ports-archive-keyring_2023.02.01_all.deb
+        wget -c -P /tmp http://http.us.debian.org/debian/pool/main/d/debian-archive-keyring/debian-archive-keyring_2023.3+deb12u1_all.deb
+        sudo dpkg -i /tmp/debian-archive-keyring_2023.3+deb12u1_all.deb
     fi
 fi
 
@@ -59,11 +58,12 @@ sudo mount ${LOOP_DEVICE}p1 /tmp/deb_rv64
 # install base files
 sudo -E debootstrap \
             --arch=riscv64 \
-            --keyring /usr/share/keyrings/debian-ports-archive-keyring.gpg \
-            --include=debian-ports-archive-keyring \
+            --keyring /usr/share/keyrings/debian-archive-keyring.gpg \
+            --include=debian-archive-keyring \
+            --components=main,contrib,non-free,non-free-firmware \
             unstable \
             /tmp/deb_rv64 \
-            http://deb.debian.org/debian-ports
+            http://deb.debian.org/debian
 
 if [ $? -ne 0 ]; then
     cleanup 1
