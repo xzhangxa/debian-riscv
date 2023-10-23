@@ -40,7 +40,7 @@ cat <<EOF > /etc/default/grub
 GRUB_DEFAULT=0
 GRUB_TIMEOUT=0
 GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
-GRUB_CMDLINE_LINUX_DEFAULT="console=ttyS0 net.ifnames=0 splash"
+GRUB_CMDLINE_LINUX_DEFAULT="root=/dev/vda2 console=ttyS0 net.ifnames=0 splash"
 GRUB_CMDLINE_LINUX=""
 GRUB_TERMINAL=console
 EOF
