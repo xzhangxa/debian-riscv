@@ -13,6 +13,7 @@ apt-get install -y dropbear
 apt-get clean
 
 echo debian > /etc/hostname
+echo -e "127.0.1.1\tdebian" > /etc/hosts
 
 echo "root:debian" | chpasswd
 

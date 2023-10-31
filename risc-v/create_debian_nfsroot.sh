@@ -35,7 +35,7 @@ fi
 sudo -E debootstrap \
             --arch=riscv64 \
             --keyring /usr/share/keyrings/debian-archive-keyring.gpg \
-            --include=debian-archive-keyring \
+            --include=debian-archive-keyring,dbus \
             --components=main,contrib,non-free,non-free-firmware \
             unstable \
             ${NFS_PATH} \

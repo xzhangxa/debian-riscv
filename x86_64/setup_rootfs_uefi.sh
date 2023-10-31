@@ -27,6 +27,7 @@ EOF
 
 # Change hostname
 echo debian > /etc/hostname
+echo -e "127.0.1.1\tdebian" >> /etc/hosts
 
 # Set up fstab
 cat > /etc/fstab <<EOF

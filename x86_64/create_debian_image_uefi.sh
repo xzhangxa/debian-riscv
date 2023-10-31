@@ -61,7 +61,7 @@ sudo mount ${LOOP_DEVICE}p1 ${ROOTFS_DIR}/boot/efi
 sudo -E debootstrap \
             --arch=amd64 \
             --keyring=/usr/share/keyrings/debian-archive-keyring.gpg \
-            --include=debian-archive-keyring,linux-image-amd64,openssh-server,sudo,locales \
+            --include=debian-archive-keyring,linux-image-amd64,openssh-server,sudo,locales,dbus \
             --components=main,contrib,non-free,non-free-firmware \
             stable \
             ${ROOTFS_DIR} \
